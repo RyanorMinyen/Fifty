@@ -4,7 +4,7 @@ class Card:
     suit = None
     rank = None
 
-    suits = ['S', 'H', 'D', 'C']
+    suits = ['S', 'H', 'D', 'C']  # Spade, Heart, Diamond, Club
     ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
     def __init__(self, suit, rank):
