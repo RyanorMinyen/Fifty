@@ -1,21 +1,22 @@
 # the card class
+# Suits doesn't matter in Fifty nor in BlackJack
+# ranks 2-9 have value 2-9, correspondingly. Ace can be either 1 or 11, 10 through kings all have value 10.
+# the natural win is five 10s
+
 
 class Card:
-    suit = None
-    rank = None
 
-    suits = ['S', 'H', 'D', 'C']  # Spade, Heart, Diamond, Club
     ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
-    def __init__(self, suit, rank):
-        self.suit = suit
+    def __init__(self, rank):
+        # self.suit = suit
         self.rank = rank
 
     def __toString__(self):
-        return self.rank + self.suit
+        return self.rank
 
     def __equal__(self, other):
         if isinstance(other, Card):  # check if the object is a Card
-            return self.rank == other.rank and self.suit == other.suit
+            return self.rank == other.rank
         else:
             return "Not a card!"  # if not a card, no comparison should be performed
