@@ -12,7 +12,7 @@ class Shoe:
     def __init__(self):
         self.cards = self.make_cards(DECK_SIZE)
 
-    def counts(self):
+    def count(self):
         return len(self.cards)
 
     def __toString__(self):
@@ -22,6 +22,16 @@ class Shoe:
             stringofCards += card.rank + " "
 
         return stringofCards
+
+    def draw(self):
+        while self.isEmpty() == False:
+            return self.cards.pop()
+
+    def isEmpty(self):
+        if self.count() == 0:
+            return True
+        else:
+            return False
 
     def make_cards(self, DECK_SIZE):
         cards = []
