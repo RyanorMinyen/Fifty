@@ -3,24 +3,22 @@
 # *************
 
 from cards import Card
-from deck import Deck
-
-DECK_SIZE = 6
+from shoe import Shoe
 
 
 def initial_state() -> tuple:
     player = 0
     hand = []
-    deck = Deck(DECK_SIZE)
+    shoe = Shoe()
 
-    return (player, hand, deck)
+    return (player, hand, shoe)
 
 
 def check_hand(hands: Card) -> bool:
 
     sum = 0
     for card in hands:
-        sum+card.ranks
+        sum+card.rank
 
     if sum <= 50:
         return False
