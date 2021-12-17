@@ -2,14 +2,14 @@
 from cards import Card
 from random import shuffle
 
-DECK_SIZE = 6  # change this to change the number of decks
 
 ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
 
 class Shoe:
 
-    def __init__(self):
+    def __init__(self, DECK_SIZE):
+        self.DECK_SIZE = DECK_SIZE  # let player choose the deck_size
         self.cards = self.make_cards(DECK_SIZE)
 
     def count(self):

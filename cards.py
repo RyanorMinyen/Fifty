@@ -20,3 +20,16 @@ class Card:
             return self.rank == other.rank
         else:
             return "Not a card!"  # if not a card, no comparison should be performed
+
+    def value(self) -> int:
+
+        if self.rank == 'J':
+            return 10
+        elif self.rank == 'Q':
+            return 10
+        elif self.rank == 'K':
+            return 10
+        elif self.rank == 'A':
+            return 11
+        else:
+            return int(self.rank)
