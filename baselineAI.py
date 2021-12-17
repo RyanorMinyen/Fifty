@@ -1,88 +1,157 @@
 import numpy as np
 import random
 import game
+import shoe
+import cards
 
 
-def ai_play_turn(player_hand, dealer_hand, shoe) -> tuple:
+def dealer(dealer_hand, remaining_cards):
+    dealer_score = sum(dealer_hand)
+    while dealer_score < 50:
+        dealer_hand.append(remaining_cards.draw())
+        dealer_score = sum(dealer_hand)
+        print("Dealer hand: " + game.show_hand(dealer_hand))
+        print("Dealer score: " + str(dealer_score))
 
-    print("Hit or stay?")
-    choice = random.choice(["hit", "stay"])
-    player_busted = game.busted(player_hand)
+    dealer_busted = game.busted(dealer_hand)
+    if(dealer_busted):
+        print("Dealer busted, player wins")
+        return (True, dealer_hand, remaining_cards)
 
-    while (player_busted == False and choice == "hit"):
-        player_hand.append(shoe.draw())
-        print("Player hand: " + game.show_hand(player_hand))
-        print("Player score: " + str(game.score(player_hand)))
-        player_busted = game.busted(player_hand)
-        if(player_busted):
-            print("Player busted, dealer wins")
-            return (True, (player_hand, dealer_hand, shoe))
-        print("Hit or stay?")
-        choice = random.choice(["hit", "stay"])
+    return (False, dealer_hand, remaining_cards)
 
-    if choice == "stay":
-        while game.score(dealer_hand) < game.score(player_hand):
-            game.dealer_turn(player_hand, dealer_hand, shoe)
 
-        if (game.compare_hands(player_hand, dealer_hand)) == 1 and game.busted(player_hand) == False:
-            print("Player wins!")
-        elif (game.compare_hands(player_hand, dealer_hand)) == -1 and game.busted(dealer_hand) == False:
-            print("Dealer wins!")
-        elif(game.compare_hands(player_hand, dealer_hand) == 0):
-            print("Draw!")
+def sum(cards) -> int:
+    score = 0
+    for card in cards:
+        if card.rank == 'J':
+            score += 10
+        elif card.rank == 'Q':
+            score += 10
+        elif card.rank == 'K':
+            score += 10
+        elif card.rank == 'A':
+            score += 11
         else:
-            print()
+            score += int(card.rank)
+    return score
 
-    return player_hand, dealer_hand, shoe
+
+def ai_play_turn(player_hand, dealer_hand, remaining_cards):
+
+    player_score = sum(player_hand)
+    while player_score < 50:
+        player_hand.append(remaining_cards.draw())
+        player_score = sum(player_hand)
+        print("Player hand: " + game.show_hand(player_hand))
+        print("Player score: " + str(player_score))
+
+    player_busted = game.busted(player_hand)
+    if(player_busted):
+        print("Player busted, dealer wins")
+        return False, remaining_cards
+
+    dealer_busted, dealer_hand, remaining_cards = dealer(
+        dealer_hand, remaining_cards)
+    if(dealer_busted == False):
+        if(player_score > sum(dealer_hand)):
+            print("Player wins")
+            return True, remaining_cards
+        elif(player_score < sum(dealer_hand)):
+            print("Dealer wins")
+            return False, remaining_cards
+        else:
+            print("Draw")
+            return True, remaining_cards
+
+    return dealer_busted, remaining_cards
+
+
+def cards(DECK_SIZE) -> tuple:
+
+    cards = shoe.Shoe(DECK_SIZE)
+
+    return cards
+
+
+def simulationOneGame(player_hand, dealer_Hand, remaining_cards):
+
+    game_state = game.draw_cards(player_hand, dealer_Hand, remaining_cards)
+
+    player_hand = game_state[0]
+    dealer_hand = game_state[1]
+    remaining_cards = game_state[2]
+
+    player_score = sum(player_hand)
+    dealer_score = sum(dealer_hand)
+
+    print()
+    print("Player hand: " + game.show_hand(player_hand))
+    print("Dealer hand: " + game.show_hand(dealer_hand))
+
+    # evaluate the first five cards
+
+    if(game.FiftyFive(player_score, dealer_score)):
+        if(player_score == 55 and dealer_score == 55):
+            print("Draw")
+            return (False, remaining_cards)
+        elif(player_score == 55):
+            print("Player wins")
+            return (True, remaining_cards)
+        else:
+            print("Dealer wins")
+            return (False, remaining_cards)
+    else:
+        print("Player score: " + str(player_score))
+        print("Dealer score: " + str(dealer_score))
+        print("Remaining cards: " + str(remaining_cards.count()))
+
+        player_win, remaining_cards = ai_play_turn(
+            player_hand, dealer_hand, remaining_cards)
+        if(player_win):
+            print()
+            print("Player score: " + str(sum(player_hand)) +
+                  " Dealer score: " + str(sum(dealer_hand)))
+            return (True, remaining_cards)
+        return player_win, remaining_cards
 
 
 if __name__ == '__main__':
 
-    AIplayer_busted = False
-    dealer_busted = False
-
-    print("This a simulation of BlackJack with the baseline ai that has random behavior.\n")
+    print("This a simulation of BlackJack with the baseline ai that has random behavior.")
     print("please enter the number of simulations you would like to run: either 50 or 100")
     rounds = int(input())
-    if rounds == 50:
+    if rounds == 100:
         print("Running 50 simulations\n")
-        DECK_SIZE = 40
-    elif rounds == 100:
-        DECK_SIZE = 80
+        DECK_SIZE = 50
+    elif rounds == 200:
+        DECK_SIZE = 100
         print("Running 100 simulations\n")
+    elif rounds == 300:
+        DECK_SIZE = 150
+        print("Running 150 simulations\n")
+    elif rounds > 300:
+        DECK_SIZE = 300
+        print("Running 200 simulations\n")
 
     wins = 0
     roundCount = 0
 
-    game_state = game.initial_state(DECK_SIZE)
+    remaining_cards = cards(DECK_SIZE)
 
-    while(rounds > 0 and game_state[2].count() > 0):
+    while(rounds > 0):
 
-        game_state = game.draw_cards(
-            game_state[0], game_state[1], game_state[2])
+        print("\n*************************")
+        print("iteration " + str(roundCount) + ":")
+        player_hand = []
+        dealer_hand = []
+        player_win = False
 
-        player_hand = game_state[0]
-        dealer_hand = game_state[1]
-        remaining_cards = game_state[2]
+        player_win, remaining_cards = simulationOneGame(
+            player_hand, dealer_hand, remaining_cards)
 
-        player_score = game.score(player_hand)
-        dealer_score = game.score(dealer_hand)
-
-        # evaluate the first five cards
-        if(game.FiftyFive(player_score, dealer_score)):
-
-            if(game.score(player_hand) > game.score(dealer_hand)):
-                wins += 1
-        else:
-
-            game_over = ai_play_turn(
-                game_state[0], game_state[1], game_state[2])[0]
-            if(game.score(player_hand) > game.score(dealer_hand)):
-                wins += 1
-            print()
-            print("Player score: " + str(game.score(player_hand)) +
-                  " Dealer score: " + str(game.score(dealer_hand)))
-
+        if player_win:
+            wins += 1
         roundCount += 1
         rounds -= 1
 

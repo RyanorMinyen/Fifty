@@ -29,13 +29,13 @@ def show_hand(hand: Card):
     return stringofCards
 
 
-def draw_cards(player_hand, dealer_hand, shoe) -> tuple:
+def draw_cards(player_hand, dealer_hand, remaining_cards) -> tuple:
     # draw 5 cards for player and dealer
     for i in range(5):
-        player_hand.append(shoe.draw())
-        dealer_hand.append(shoe.draw())
+        player_hand.append(remaining_cards.draw())
+        dealer_hand.append(remaining_cards.draw())
 
-    return (player_hand, dealer_hand, shoe)
+    return (player_hand, dealer_hand, remaining_cards)
 
 
 def compare_hands(player_hand, dealer_hand) -> int:
@@ -174,7 +174,7 @@ if __name__ == '__main__':
         print("Dealer score: " + str(dealer_score))
         print("Remaining cards: " + str(remaining_cards.count()))
 
-        game_over = play_turn(game_state[0], game_state[1], game_state[2])[0]
+        play_turn(game_state[0], game_state[1], game_state[2])
 
         print()
         print("Player score: " + str(score(player_hand)) +
