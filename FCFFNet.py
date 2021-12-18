@@ -3,6 +3,7 @@ import game
 import shoe
 import cards
 import torch as tr
+import matplotlib.pyplot as pt
 
 # Had an error plotting the learning curve
 # This little section of the code is provided on https://stackoverflow.com/questions/20554074/sklearn-omp-error-15-initializing-libiomp5md-dll-but-found-mk2iomp5md-dll-a"
