@@ -118,7 +118,7 @@ def simulationOneGame(player_hand, dealer_Hand, remaining_cards):
 
 # Reference code ANNs.ipynb from the in class example provided by Professor Katz
 ################################################################################
-# This code is slightl modified
+# This code is slightly modified
 def state_tensor(cards, DECK_SIZE):
     # cards == [number,...,number]
     state = tr.zeros((DECK_SIZE, 52))
@@ -127,10 +127,13 @@ def state_tensor(cards, DECK_SIZE):
     state = state.reshape(DECK_SIZE*52)  # unwrap into a long vector
     return state
 
+################################################################################
+################################################################################
+################################################################################
 
 # Reference code ANNs.ipynb from the in class example provided by Professor Katz
 ################################################################################
-# This code is slightl modified
+# This code is not modified
 class Linear(tr.nn.Module):
     def __init__(self, in_features, out_features):
         super(Linear, self).__init__()
@@ -143,7 +146,9 @@ class Linear(tr.nn.Module):
     def forward(self, x):
         return tr.mm(x, self.weight) + self.bias
 
-
+################################################################################
+################################################################################
+################################################################################
 if __name__ == '__main__':
 
     print("This a simulation of BlackJack with the baseline ai that has random behavior.")
@@ -189,7 +194,7 @@ if __name__ == '__main__':
 
     # Reference code ANNs.ipynb from the in class example provided by Professor Katz
     ################################################################################
-    # This code is slightl modified
+    # This code is slightly modified
     inputs = tr.stack([state_tensor(hand, DECK_SIZE) for (hand, _) in data])
     targets = tr.tensor([score for (_, score) in data]).reshape(-1, 1)
 
@@ -227,7 +232,9 @@ if __name__ == '__main__':
 
         if epoch % 100 == 0:
             print("Epoch: {}\tLoss: {}".format(epoch, loss.item()))
-
+################################################################################
+################################################################################
+################################################################################
     precicted_output = [float(i) for i in output]
 
     f = open("output.txt", "w")
