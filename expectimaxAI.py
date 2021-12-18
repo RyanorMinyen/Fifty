@@ -138,20 +138,10 @@ def simulationOneGame(player_hand, dealer_Hand, remaining_cards):
 if __name__ == '__main__':
 
     print("This a simulation of BlackJack with the baseline ai that has random behavior.")
-    print("please enter the number of simulations you would like to run: either 50 or 100")
+    print("please enter the number of simulations you would like to run: ")
     rounds = int(input())
-    if rounds == 100:
-        print("Running 50 simulations\n")
-        DECK_SIZE = 50
-    elif rounds == 200:
-        DECK_SIZE = 100
-        print("Running 100 simulations\n")
-    elif rounds == 300:
-        DECK_SIZE = 100
-        print("Running 150 simulations\n")
-    elif rounds > 300:
-        DECK_SIZE = 307
-        print("Running 200 simulations\n")
+    DECK_SIZE = int((rounds * 16) / 52)
+    print("The appropriate deck size is: " + str(DECK_SIZE))
 
     wins = 0
     roundCount = 0
