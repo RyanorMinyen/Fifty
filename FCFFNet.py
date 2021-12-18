@@ -119,7 +119,6 @@ def simulationOneGame(player_hand, dealer_Hand, remaining_cards):
 # Reference code ANNs.ipynb from the in class example provided by Professor Katz
 ################################################################################
 # This code is slightl modified
-
 def state_tensor(cards, DECK_SIZE):
     # cards == [number,...,number]
     state = tr.zeros((DECK_SIZE, 52))
