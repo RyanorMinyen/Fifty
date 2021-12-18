@@ -86,9 +86,6 @@ def dealer_turn(player_hand, dealer_hand, shoe) -> tuple:
         print("Dealer hand: " + show_hand(dealer_hand))
         print("Dealer score: " + str(score(dealer_hand)))
 
-        # if score(dealer_hand) >= 50:
-        #   break
-
     dealer_busted = busted(dealer_hand)
     if(dealer_busted):
         print("Dealer busted, player wins")
