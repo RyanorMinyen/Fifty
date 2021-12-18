@@ -4,6 +4,14 @@ import shoe
 import cards
 import torch as tr
 
+# Had an error plotting the learning curve
+# This little section of the code is provided on https://stackoverflow.com/questions/20554074/sklearn-omp-error-15-initializing-libiomp5md-dll-but-found-mk2iomp5md-dll-a"
+# Issue is fixed
+
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+################################################
 
 def dealer(dealer_hand, remaining_cards):
     dealer_score = sum(dealer_hand)
@@ -242,3 +250,15 @@ if __name__ == '__main__':
         f.write(str(precicted_output[i]) + "\n")
 
     f.close()
+    
+# Reference code ANNs.ipynb from the in class example provided by Professor Katz
+################################################################################
+# This code is not modified
+
+    pt.plot(learning_curve)
+    pt.xlabel("Gradient descent steps")
+    pt.ylabel("Batch Loss")
+    pt.show()
+################################################################################
+################################################################################
+################################################################################
