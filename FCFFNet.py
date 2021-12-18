@@ -116,15 +116,6 @@ def simulationOneGame(player_hand, dealer_Hand, remaining_cards):
         return player_win, player_hand, remaining_cards
 
 
-def state_tensor(cards, remaining_cards):
-    # cards == [number,...,number]
-    state = tr.zeros(remaining_cards)
-    for (number) in cards:
-        state[number] = 1.
-    state = state.reshape(remaining_cards)  # unwrap into a long vector
-    return state
-
-
 def state_tensor(cards, DECK_SIZE):
     # cards == [number,...,number]
     state = tr.zeros((DECK_SIZE, 52))
