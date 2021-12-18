@@ -4,6 +4,17 @@ import game
 import shoe
 import cards
 
+# predicted Dealer ending value
+# 7 is average card value
+
+
+def simple_evaluation(dealer_hand, remaining_cards):
+    dealerVal = sum(dealer_hand)
+    dealNum = sum(remaining_cards.cards) / len(remaining_cards.cards)
+    while dealerVal < 50:
+        dealerVal += dealNum
+    return dealerVal
+
 
 def dealer(dealer_hand, remaining_cards):
     dealer_score = sum(dealer_hand)
@@ -37,14 +48,22 @@ def sum(cards) -> int:
     return score
 
 
-def ai_play_turn(player_hand, dealer_hand, remaining_cards):
+def expect_ai_play_turn(player_hand, dealer_hand, remaining_cards):
 
     player_score = sum(player_hand)
-    while player_score < 50:
-        player_hand.append(remaining_cards.draw())
-        player_score = sum(player_hand)
+    # predicted dealer ending hand
+    # if dealer is predicted to bust stay if not
+    deal = simple_evaluation(dealer_hand, remaining_cards)
+    print("Dealer predicted score: " + str(deal))
+    if deal > 55:
         print("Player hand: " + game.show_hand(player_hand))
         print("Player score: " + str(player_score))
+    else:
+        while player_score < deal:
+            player_hand.append(remaining_cards.draw())
+            player_score = sum(player_hand)
+            print("Player hand: " + game.show_hand(player_hand))
+            print("Player score: " + str(player_score))
 
     player_busted = game.busted(player_hand)
     if(player_busted):
@@ -92,9 +111,9 @@ def simulationOneGame(player_hand, dealer_Hand, remaining_cards):
     # evaluate the first five cards
 
     if(game.FiftyFive(player_score, dealer_score)):
-        if(player_score == 55 and dealer_score == 55):
+        if(player_score == 55):
             print("Draw")
-            return (True, remaining_cards)
+            return (False, remaining_cards)
         elif(player_score == 55):
             print("Player wins")
             return (True, remaining_cards)
@@ -106,7 +125,7 @@ def simulationOneGame(player_hand, dealer_Hand, remaining_cards):
         print("Dealer score: " + str(dealer_score))
         print("Remaining cards: " + str(remaining_cards.count()))
 
-        player_win, remaining_cards = ai_play_turn(
+        player_win, remaining_cards = expect_ai_play_turn(
             player_hand, dealer_hand, remaining_cards)
         if(player_win):
             print()
@@ -121,19 +140,17 @@ if __name__ == '__main__':
     print("This a simulation of BlackJack with the baseline ai that has random behavior.")
     print("please enter the number of simulations you would like to run: either 50 or 100")
     rounds = int(input())
-    if rounds <= 50:
-        DECK_SIZE = 30
-    elif rounds == 100:
+    if rounds == 100:
         print("Running 50 simulations\n")
         DECK_SIZE = 50
     elif rounds == 200:
         DECK_SIZE = 100
         print("Running 100 simulations\n")
     elif rounds == 300:
-        DECK_SIZE = 150
+        DECK_SIZE = 100
         print("Running 150 simulations\n")
     elif rounds > 300:
-        DECK_SIZE = 300
+        DECK_SIZE = 307
         print("Running 200 simulations\n")
 
     wins = 0
